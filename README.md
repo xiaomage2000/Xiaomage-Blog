@@ -2,7 +2,7 @@
 我的第一个PHP项目，Xiaomage's Blog（伪）
 
 详情请见：
- [https://github.com/xiaomage2000/Xiaomage-Blog](https://github.com/xiaomage2000/Xiaomage-Blog)
+ [https://xmgspace.me/archives/27/](https://xmgspace.me/archives/27/)
  
  Demo:
  [https://xmgspace.me/youthol_learning/6th/index.php](https://xmgspace.me/youthol_learning/6th/index.php)
