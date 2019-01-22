@@ -1,0 +1,30 @@
+#new_post_tittle
+{
+    color: #3354AA;
+    font-size: 26px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    margin-left: 30px;
+}
+
+#new_post_flame
+{
+    line-height: 40px;
+    margin-left: 30px;
+}
+
+.post_buttons
+{
+    width:  80px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 20px;
+    background: #F6F6F6;
+    border: 1px solid #EEE;
+}
+
+#back
+{
+    margin-left: 30px;
+}
