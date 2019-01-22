@@ -6,7 +6,7 @@ if ($logined == 0) {
     echo header('Location: ./access_denied.php');
 }
 
-$connect = new mysqli("127.0.0.1","root","","xiaomage_blog");
+$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
 mysqli_set_charset($connect,"utf8");
 
 $edit_id = $_GET["id"];
@@ -43,7 +43,9 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
             <div style="color: #999;">Mayme I'm a geek! Even if it isn't archive now. 嘤嘤嘤 QAQ...</div>
             <div id="nav">
                 <div class="nav_div"><a href="./index.php">&nbsp;&nbsp;博客主页_Index&nbsp;&nbsp;</a></div>
+                <?php if ( $logined == 1) { ?>
                 <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
+                <?php } ?>
                 <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
                 <?php if ($logined == 1) { ?>
                     <div class="nav_div"><a href="./logout.php">&nbsp;&nbsp;登出_Logout&nbsp;&nbsp;</a></div>
@@ -86,8 +88,8 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
         </div>
 
         <div id="bottom">
-            <div>©2019 Xiaomage's Blog.All Rights Reserved.</div>
-            <div>Made by ♥</div>
+            <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
+            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
         </div>
     </div>
 </body>

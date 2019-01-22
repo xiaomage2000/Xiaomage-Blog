@@ -2,6 +2,7 @@
 
 include './islogin.php';
 
+$author = $_COOKIE["username"];
 if ($logined == 0) {
     echo header('Location: ./access_denied.php');
 }
@@ -29,7 +30,9 @@ if ($logined == 0) {
             <div style="color: #999;">Mayme I'm a geek! Even if it isn't archive now. 嘤嘤嘤 QAQ...</div>
             <div id="nav">
                 <div class="nav_div"><a href="./index.php">&nbsp;&nbsp;博客主页_Index&nbsp;&nbsp;</a></div>
+                <?php if ( $logined == 1) { ?>
                 <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
+                <?php } ?>
                 <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
                 <?php if ($logined == 1) { ?>
                     <div class="nav_div"><a href="./logout.php">&nbsp;&nbsp;登出_Logout&nbsp;&nbsp;</a></div>
@@ -46,7 +49,8 @@ if ($logined == 0) {
                     <div></div>
                     <form action="./posted.php" method="post">
                         标题：<input type="text" name="tittle" style="width:45%;height:20px;" placeholder="请输入标题"><br>
-                        作者：<input type="text" name="author" style="width:45%;height:20px;" placeholder="请输入作者"><br>
+                        <input type="hidden" name="author" value="<?php echo $author?>">
+                        <?php echo "作者：$author"; ?><br>
                         文章内容：<br><textarea name="content" style="width:85%;height:320px;" placeholder="在此输入文章内容"></textarea><br><br>
                         <input type="submit" class="post_buttons" value="发布">
                         <input type="reset" class="post_buttons">
@@ -71,8 +75,8 @@ if ($logined == 0) {
         </div>
 
         <div id="bottom">
-            <div>©2019 Xiaomage's Blog.All Rights Reserved.</div>
-            <div>Made by ♥</div>
+            <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
+            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
         </div>
     </div>
 </body>

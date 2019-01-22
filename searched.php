@@ -1,23 +1,33 @@
 <?php
 
 include './islogin.php';
+// 注释 By Xiaomage
+if (isset($_GET['page'])){
+    $page = $_GET['page'];
+}
+else $page=1; //确定当前页数
+$per_page = 4; //每页显示的文章数量
+$start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
 
 $search=$_GET['search'];
 
 date_default_timezone_set("PRC");
-$connect = new mysqli("127.0.0.1","root","","xiaomage_blog");
+$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
 mysqli_set_charset($connect,"utf8");
 
 $flag=0;
 if ($search == NULL) $flag = 2;
 else {
-$sql = "SELECT * FROM xiaomage_blog WHERE (tittle LIKE '%$search%' OR content LIKE '%$search%' OR author LIKE '%$search%') ORDER BY id DESC";
+$sql = "SELECT * FROM xiaomage_blog WHERE (tittle LIKE '%$search%' OR content LIKE '%$search%' OR author LIKE '%$search%') ORDER BY id DESC LIMIT $start_form,$per_page";
+$get_total  = "SELECT COUNT(*) FROM xiaomage_blog WHERE (tittle LIKE '%$search%' OR content LIKE '%$search%' OR author LIKE '%$search%')";
 $data = $connect->query( $sql );
+$total = $connect->query( $get_total );
 $data_arrays = [];
 while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
 {
     $data_arrays[] = $data_array;
 }
+$totals = $total->fetch_array();
 }
 ?>
 <!DOCTYPE html>
@@ -45,7 +55,9 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
             <div style="color: #999;">Mayme I'm a geek! Even if it isn't archive now. 嘤嘤嘤 QAQ...</div>
             <div id="nav">
                 <div class="nav_div"><a href="./index.php">&nbsp;&nbsp;博客主页_Index&nbsp;&nbsp;</a></div>
+                <?php if ( $logined == 1) { ?>
                 <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
+                <?php } ?>
                 <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
                 <?php if ($logined == 1) { ?>
                     <div class="nav_div"><a href="./logout.php">&nbsp;&nbsp;登出_Logout&nbsp;&nbsp;</a></div>
@@ -80,10 +92,12 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
                         ?>
                         </div>
                         <div id="blog_content"><?php echo $data_array['content']?></div>
+                        <?php if ($logined == 1) { ?>
                         <div id="blog_options">
                             <div class="blog_option"><a href="./edit.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;编辑此文章&nbsp;&nbsp;</a></div>
                             <div class="blog_option"><a href="./delete.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;删除此文章&nbsp;&nbsp;</a></div>
                         </div>
+                        <?php } ?>
                         <hr>
                     </div>
                 <?php
@@ -94,6 +108,22 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
                 }
                     if ($flag==0) echo 'QAQ...没有找到搜索结果，换一个关键词试试吧~';
                 ?>
+                <?php if ($flag != 0) { ?>
+                    <div id="page_turn">
+                        <div class="page_turns"><a class="page_turn_a" href="./searched.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1); echo "&&search=$search";?>">
+                        <?php 
+                            if ($page == 1) echo '&nbsp;&nbsp;没有上一页了&nbsp;&nbsp;';
+                            else echo '&nbsp;&nbsp;⬅上一页&nbsp;&nbsp;';
+                        ?>
+                        </a></div>
+                        <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./searched.php?page=<?php if (($totals[0] - ($page * $per_page)) > 0) echo ($page + 1);
+                            else echo ($page); echo "&&search=$search";?>">
+                        <?php
+                            if (($totals[0] - $page * $per_page) > 0) echo '&nbsp;&nbsp;下一页➡&nbsp;&nbsp;';
+                            else echo '&nbsp;&nbsp;没有下一页了&nbsp;&nbsp;';
+                        ?></a></div>
+                    </div>
+                <?php } ?>
                 </div>
             </div>
 
@@ -114,8 +144,8 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
         </div>
 
         <div id="bottom">
-            <div>©2019 Xiaomage's Blog.All Rights Reserved.</div>
-            <div>Made by ♥</div>
+            <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
+            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
         </div>
     </div>
 </body>

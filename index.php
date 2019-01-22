@@ -1,4 +1,5 @@
 <?php
+
 include './islogin.php';
 // 注释 By Xiaomage
 if (isset($_GET['page'])){
@@ -8,7 +9,7 @@ else $page=1; //确定当前页数
 $per_page = 4; //每页显示的文章数量
 $start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
 date_default_timezone_set("PRC");
-$connect = new mysqli("127.0.0.1","root","","xiaomage_blog");
+$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
 mysqli_set_charset($connect,"utf8");
 $sql = "SELECT * FROM xiaomage_blog ORDER BY id DESC LIMIT $start_form,$per_page";
 $get_total  = "SELECT COUNT(*) FROM xiaomage_blog";
@@ -21,8 +22,8 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
 }
 $totals = $total->fetch_array();
 
-
-$connect1 = new mysqli("127.0.0.1","root","","xiaomage_blog");
+//留言板功能
+$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
 mysqli_set_charset($connect1,"utf8");
 $sql1 = "SELECT * FROM blog_comment ORDER BY id DESC LIMIT 3";
 $data1 = $connect1->query( $sql1 );
@@ -56,7 +57,9 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
             <div style="color: #999;">Mayme I'm a geek! Even if it isn't archive now. 嘤嘤嘤 QAQ...</div>
             <div id="nav">
                 <div class="nav_div"><a href="./index.php">&nbsp;&nbsp;博客主页_Index&nbsp;&nbsp;</a></div>
+                <?php if ( $logined == 1) { ?>
                 <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
+                <?php } ?>
                 <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
                 <?php if ($logined == 1) { ?>
                     <div class="nav_div"><a href="./logout.php">&nbsp;&nbsp;登出_Logout&nbsp;&nbsp;</a></div>
@@ -82,10 +85,12 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
                         ?>
                         </div>
                         <div id="blog_content"><?php echo $data_array['content']?></div>
+                        <?php if ($logined == 1) { ?>
                         <div id="blog_options">
                             <div class="blog_option"><a href="./edit.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;编辑此文章&nbsp;&nbsp;</a></div>
                             <div class="blog_option"><a href="./delete.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;删除此文章&nbsp;&nbsp;</a></div>
                         </div>
+                        <?php } ?>
                         <hr>
                     </div>
                 <?php
@@ -154,8 +159,8 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
         </div>
 
         <div id="bottom">
-            <div>©2019 Xiaomage's Blog.All Rights Reserved.</div>
-            <div>Made by ♥</div>
+            <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
+            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
         </div>
     </div>
 </body>

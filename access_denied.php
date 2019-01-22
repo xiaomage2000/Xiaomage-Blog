@@ -26,7 +26,9 @@ include './islogin.php';
             <div style="color: #999;">Mayme I'm a geek! Even if it isn't archive now. 嘤嘤嘤 QAQ...</div>
             <div id="nav">
                 <div class="nav_div"><a href="./index.php">&nbsp;&nbsp;博客主页_Index&nbsp;&nbsp;</a></div>
+                <?php if ( $logined == 1) { ?>
                 <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
+                <?php } ?>
                 <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
                 <?php if ($logined == 1) { ?>
                     <div class="nav_div"><a href="./logout.php">&nbsp;&nbsp;登出_Logout&nbsp;&nbsp;</a></div>
@@ -42,9 +44,6 @@ include './islogin.php';
                     <div id=search_tittle>禁止的操作！ Access Denied!</div>
                     <div style="margin-bottom:20px;margin-top:-10px;">你登录之后才能进行这项操作！请捷足先登！</div>
                     <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
-                </div>
-                <div>
-                    
                 </div>
             </div>
 
@@ -65,8 +64,8 @@ include './islogin.php';
         </div>
 
         <div id="bottom">
-            <div>©2019 Xiaomage's Blog.All Rights Reserved.</div>
-            <div>Made by ♥</div>
+            <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
+            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
         </div>
     </div>
 </body>
