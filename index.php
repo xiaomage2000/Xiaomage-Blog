@@ -21,19 +21,6 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
     $data_arrays[] = $data_array;
 }
 $totals = $total->fetch_array();
-
-//留言板功能
-$connect1 = new mysqli("server","your dbusername","dbpassword","dbname");
-mysqli_set_charset($connect1,"utf8");
-$sql1 = "SELECT * FROM blog_comment ORDER BY id DESC LIMIT 3";
-$data1 = $connect1->query( $sql1 );
-$data_arrays1 = [];
-while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
-{
-    $data_arrays1[] = $data_array1;
-}
-
-;
 ?>
 <!DOCTYPE html>
 <html lang="zh_cn">
