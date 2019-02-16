@@ -22,6 +22,8 @@ if ($logined == 0) {
 </head>
 
 <body>
+<div id="background-img"></div>
+<div id="background">
     <div id="flame">
         <div id="tittle">
             <div style="margin-bottom:5px;">
@@ -76,9 +78,10 @@ if ($logined == 0) {
 
         <div id="bottom">
             <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
-            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
+            <div><a href="https://github.com/xiaomage2000/Xiaomage-Blog" style="color: #999;">Made with ♥ &nbsp;&nbsp;Version : v 1.2</a></div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

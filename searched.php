@@ -12,7 +12,7 @@ $start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
 $search=$_GET['search'];
 
 date_default_timezone_set("PRC");
-$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
+$connect = new mysqli("server","your dbusername","dbpassword","dbname");
 mysqli_set_charset($connect,"utf8");
 
 $flag=0;
@@ -47,6 +47,8 @@ $totals = $total->fetch_array();
 </head>
 
 <body>
+<div id="background-img"></div>
+<div id="background">
     <div id="flame">
         <div id="tittle">
             <div style="margin-bottom:5px;">
@@ -84,7 +86,7 @@ $totals = $total->fetch_array();
                         $flag++;
                 ?>
                     <div id="blogs">
-                        <div id="blog_tittle"><?php echo $data_array['tittle']?></div>
+                        <div id="blog_tittle"><a id="title_a" href="./read.php?article_id=<?php echo $data_array['id'] ?>"><?php echo $data_array['tittle']?></a></div>
                         <div id="blog_author"><?php echo 'By&nbsp;&nbsp;'.$data_array['author']?></div>
                         <div id="blog_time"><?php echo '发布时间: '.date( "Y-m-d H:i:s", $data_array['post_time']).'&nbsp;&nbsp;&nbsp;'?>
                         <?php if ($data_array['edit_time'] != NULL)
@@ -110,7 +112,7 @@ $totals = $total->fetch_array();
                 ?>
                 <?php if ($flag != 0) { ?>
                     <div id="page_turn">
-                        <div class="page_turns"><a class="page_turn_a" href="./searched.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1); echo "&&search=$search";?>">
+                        <div class="page_turns"><a class="page_turn_a" href="./searched.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1); echo "&search=$search";?>">
                         <?php 
                             if ($page == 1) echo '&nbsp;&nbsp;没有上一页了&nbsp;&nbsp;';
                             else echo '&nbsp;&nbsp;⬅上一页&nbsp;&nbsp;';
@@ -145,9 +147,10 @@ $totals = $total->fetch_array();
 
         <div id="bottom">
             <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
-            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
+            <div><a href="https://github.com/xiaomage2000/Xiaomage-Blog" style="color: #999;">Made with ♥ &nbsp;&nbsp;Version : v 1.2</a></div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

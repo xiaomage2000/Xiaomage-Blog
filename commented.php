@@ -4,7 +4,7 @@ include './islogin.php';
 
 $flag=1;
 $flag1=1;
-$connect = new mysqli("server","your dbusername","dbpassword","xiaomage_blog");
+$connect = new mysqli("server","your dbusername","dbpassword","dbname");
 
 mysqli_set_charset($connect,"utf8");
 
@@ -16,6 +16,8 @@ if (mysqli_connect_error()){
 
 $visitor_name=$_POST["visitor_name"];
 $comment=$_POST["comment"];
+$article_id=$_POST["article_id"];
+$comment_time=time();
 
 if ($visitor_name == NULL || $comment == NULL)
 {
@@ -25,7 +27,7 @@ if ($visitor_name == NULL || $comment == NULL)
 
 if ($flag1 == 1)
 {
-$sql = "INSERT INTO blog_comment ( visitor_name, comment ) VALUES ('$visitor_name','$comment')";
+$sql = "INSERT INTO blog_comment ( visitor_name, comment , article_id , comment_time ) VALUES ('$visitor_name','$comment','$article_id','$comment_time')";
 $connect->query( $sql );
 }
 mysqli_close($connect);
@@ -49,6 +51,8 @@ mysqli_close($connect);
 </head>
 
 <body>
+<div id="background-img"></div>
+<div id="background">
     <div id="flame">
         <div id="tittle">
             <div style="margin-bottom:5px;">
@@ -79,7 +83,7 @@ mysqli_close($connect);
                     <?php if ($flag1 == 0){?>
                     <div>发表前请先确保昵称或评论内容不为空哦~<br><br></div>
                     <?php }?>
-                    <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
+                    <a href="./read.php?article_id=<?php echo $article_id ?>">点击<span style="color: #3354AA">这里</span>返回原文章~~ </a>
                 </div>
             </div>
 
@@ -101,9 +105,10 @@ mysqli_close($connect);
 
         <div id="bottom">
             <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
-            <div>Made by ♥ &nbsp;&nbsp;Version : v 1.1</div>
+            <div><a href="https://github.com/xiaomage2000/Xiaomage-Blog" style="color: #999;">Made with ♥ &nbsp;&nbsp;Version : v 1.2</a></div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

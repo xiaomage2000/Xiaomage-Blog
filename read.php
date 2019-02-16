@@ -2,30 +2,25 @@
 
 include './islogin.php';
 // 注释 By Xiaomage
-if (isset($_GET['page'])){
-    $page = $_GET['page'];
+if (isset($_GET['article_id'])){
+    $article_id = $_GET['article_id'];
 }
-else $page=1; //确定当前页数
-$per_page = 4; //每页显示的文章数量
-$start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
+else $article_id=1; //确定当前文章ID
 date_default_timezone_set("PRC");
 $connect = new mysqli("server","your dbusername","dbpassword","dbname");
 mysqli_set_charset($connect,"utf8");
-$sql = "SELECT * FROM xiaomage_blog ORDER BY id DESC LIMIT $start_form,$per_page";
-$get_total  = "SELECT COUNT(*) FROM xiaomage_blog";
+$sql = "SELECT * FROM xiaomage_blog WHERE id='$article_id'";
 $data = $connect->query( $sql );
-$total = $connect->query( $get_total );
 $data_arrays = [];
 while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
 {
     $data_arrays[] = $data_array;
 }
-$totals = $total->fetch_array();
 
 //留言板功能
 $connect1 = new mysqli("server","your dbusername","dbpassword","dbname");
 mysqli_set_charset($connect1,"utf8");
-$sql1 = "SELECT * FROM blog_comment ORDER BY id DESC LIMIT 3";
+$sql1 = "SELECT * FROM blog_comment WHERE article_id='$article_id'";
 $data1 = $connect1->query( $sql1 );
 $data_arrays1 = [];
 while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
@@ -47,6 +42,7 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
     <link rel="stylesheet" href="./css/index.style.css">
     <title>Xiaomage's Blog</title>
 </head>
+
 
 <body>
 <div id="background-img"></div>
@@ -98,20 +94,40 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
                 <?php
                     }
                 ?>
-                    <div id="page_turn">
-                        <div class="page_turns"><a class="page_turn_a" href="./index.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1);?>">
-                        <?php 
-                            if ($page == 1) echo '&nbsp;&nbsp;没有更新的文章了&nbsp;&nbsp;';
-                            else echo '&nbsp;&nbsp;⬅较新的文章&nbsp;&nbsp;';
-                        ?>
-                        </a></div>
-                        <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./index.php?page=<?php if (($totals[0] - ($page * $per_page)) > 0) echo ($page + 1);
-                            else echo ($page);?>">
-                        <?php
-                            if (($totals[0] - $page * $per_page) > 0) echo '&nbsp;&nbsp;较旧的文章➡&nbsp;&nbsp;';
-                            else echo '&nbsp;&nbsp;没有更旧的文章了&nbsp;&nbsp;';
-                        ?></a></div>
+                </div>
+                <div id="comment_tittle">
+                    最新评论_comment
+                </div>
+                <div id="comment_content">
+                    <?php
+                    if ($data_arrays1 != NULL){
+                        foreach ( $data_arrays1 as $data_array1 )
+                        {
+                    ?>
+                    <div>
+                        <div>
+                            <?php echo $data_array1['comment'];?>
+                        </div>
+                        <div style="text-align:right;">
+                            By <?php echo $data_array1['visitor_name']; ?><br>
+                            <?php echo '发布时间: '.date( "Y-m-d H:i:s", $data_array1['comment_time'])?>
+                        </div>
+                        <hr class="hr1">
                     </div>
+                    <?php
+                        }
+                    }
+                    else {echo '当前无评论，来抢沙发吧~';}
+                    ?>
+                </div>
+                <div id="comment_box">
+                    <div style="color: #3354AA;font-weight: bold;">请写下您的留言：</div><br>
+                    <form action="./commented.php" method="post">
+                        昵称：<input type="text" name="visitor_name" style="width:50%;height:18px;" placeholder="请输入您的昵称"><br><br>
+                        您的留言：<br><br><textarea name="comment" placeholder="请输入您的留言" style="width:80%;height:100px;"></textarea>
+                        <input type="hidden" name="article_id" value="<?php echo $article_id?>"><br>
+                        <input type="submit" value=" 提交 " class="blog_option">
+                    </form>
                 </div>
             </div>
 
@@ -136,7 +152,7 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
             <div><a href="https://github.com/xiaomage2000/Xiaomage-Blog" style="color: #999;">Made with ♥ &nbsp;&nbsp;Version : v 1.2</a></div>
         </div>
     </div>
-</div>    
+</div>
 </body>
 <?php
 mysqli_close($connect);
