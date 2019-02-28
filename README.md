@@ -10,6 +10,9 @@
 
  Demo:
  [https://lab.xmgspace.me/web_learning/6th/index.php](https://lab.xmgspace.me/web_learning/6th/index.php)
+ 
+ Xiaomage's Lab:
+  [https://lab.xmgspace.me/](https://lab.xmgspace.me/)
 
 # 更新日志：
 #### 2019.1.21 v 1.0 发布
