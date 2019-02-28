@@ -1,13 +1,14 @@
 <?php
 
+$flag=1;
+$flag1=1;
+
 include './islogin.php';
 
 if ($logined == 0) {
     echo header('Location: ./access_denied.php');
 }
 
-$flag=1;
-$flag1=1;
 $connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
 
 mysqli_set_charset($connect,"utf8");
@@ -18,22 +19,19 @@ if (mysqli_connect_error()){
     $flag=1;
 }
 
-$title=$_POST["title"];
-$author=$_POST["author"];
-$post_time=time();
-$content=$_POST["content"];
+$username=$_POST["username"];
+$passwords=$_POST["passwords"];
+$passwords1=$_POST["passwords1"];
 
-if ($title == NULL || $author == NULL ||$content == NULL)
-{
-    $flag = 0;
-    $flag1 = 0;
-}
+if (strcmp("$passwords",$passwords1) == 0)
+        {
+            $flag1 = 1;
+        }
+else $flag1 = 0;
 
-if ($flag1 == 1)
-{
-$sql = "INSERT INTO $sql_dbname ( title, author, post_time, content) VALUES ('$title','$author','$post_time','$content')";
+$sql = "UPDATE blog_user SET passwords='$passwords' WHERE username = '$username'";
 $connect->query( $sql );
-}
+
 mysqli_close($connect);
 ?>
 
@@ -48,8 +46,8 @@ mysqli_close($connect);
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.style.css">
     <link rel="stylesheet" href="./css/new_post.style.css">
-    <title>发布<?php
-                if ($flag==1 && $flag1 == 1) echo '成功';
+    <title>更改密码<?php
+                if ($flag == 1 && $flag1 == 1) echo '成功';
                 else echo '失败';
                 ?> - Xiaomage's Blog</title>
 </head>
@@ -69,7 +67,7 @@ mysqli_close($connect);
                     <div class="nav_div"><a href="./new_post.php">&nbsp;&nbsp;新文章_New Post&nbsp;&nbsp;</a></div>
                     <?php } ?>
                     <div class="nav_div"><a href="./search.php">&nbsp;&nbsp;搜索_Search&nbsp;&nbsp;</a></div>
-                    <?php if ($logined == 1) { ?>
+                    <?php if (($logined == 1)||($flag == 1 && $flag1 == 1)) { ?>
                     <div class="nav_div"><a href="./admin.php">&nbsp;&nbsp;管理Blog_Admin&nbsp;&nbsp;</a></div>
                     <?php } else {?>
                     <div class="nav_div"><a href="./login.php">&nbsp;&nbsp;登录_Login&nbsp;&nbsp;</a></div>
@@ -80,13 +78,15 @@ mysqli_close($connect);
             </div>
             <div id="main">
                 <div id="left">
-                    <div id="new_post_title">发布<?php
-                if ($flag==1) echo '成功 o(*￣▽￣*)ブ';
+                    <div id="new_post_title">更改密码<?php
+                if ($flag == 1 && $flag1 == 1) echo '成功！';
                 else echo '失败...QAQ';
                 ?></div>
                     <div id="back">
-                        <?php if ($flag1 == 0){?>
-                        <div>发布前请先确保标题、作者或文章内容不为空哦~<br><br></div>
+                        <?php if ($flag1 == 0&&$flag ==1){?>
+                        <div>请检查输入的密码，两次输入的密码不一致！<br><br></div>
+                        <?php }else if ($flag1 == 1&&$flag ==1){?>
+                        <div>更改密码成功！请使用新密码重新登录。<br><br></div>
                         <?php }?>
                         <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
                     </div>

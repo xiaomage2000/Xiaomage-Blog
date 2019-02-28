@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 include './islogin.php';
 
@@ -6,35 +6,6 @@ if ($logined == 0) {
     echo header('Location: ./access_denied.php');
 }
 
-$flag=1;
-$flag1=1;
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-
-mysqli_set_charset($connect,"utf8");
-
-if (mysqli_connect_error()){
-    $flag=0;
-}else{
-    $flag=1;
-}
-
-$title=$_POST["title"];
-$author=$_POST["author"];
-$post_time=time();
-$content=$_POST["content"];
-
-if ($title == NULL || $author == NULL ||$content == NULL)
-{
-    $flag = 0;
-    $flag1 = 0;
-}
-
-if ($flag1 == 1)
-{
-$sql = "INSERT INTO $sql_dbname ( title, author, post_time, content) VALUES ('$title','$author','$post_time','$content')";
-$connect->query( $sql );
-}
-mysqli_close($connect);
 ?>
 
 <!DOCTYPE html>
@@ -48,10 +19,7 @@ mysqli_close($connect);
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.style.css">
     <link rel="stylesheet" href="./css/new_post.style.css">
-    <title>发布<?php
-                if ($flag==1 && $flag1 == 1) echo '成功';
-                else echo '失败';
-                ?> - Xiaomage's Blog</title>
+    <title>更改密码 - Xiaomage's Blog</title>
 </head>
 
 <body>
@@ -80,15 +48,18 @@ mysqli_close($connect);
             </div>
             <div id="main">
                 <div id="left">
-                    <div id="new_post_title">发布<?php
-                if ($flag==1) echo '成功 o(*￣▽￣*)ブ';
-                else echo '失败...QAQ';
-                ?></div>
-                    <div id="back">
-                        <?php if ($flag1 == 0){?>
-                        <div>发布前请先确保标题、作者或文章内容不为空哦~<br><br></div>
-                        <?php }?>
-                        <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
+                    <div id="new_post_title">更改密码</div>
+                    <div id="new_post_flame">
+                        <div>建议密码包含数字，大小写字母和符号，密码安全性更高哦！<br>
+                        请确认两次输入的密码相同。<br><br></div>
+                        <form action="./changepwed.php" method="post">
+                            新密码：&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" name="passwords" style="width:45%;height:20px;"
+                                placeholder="请输入新密码" required><br>
+                            密码确认：<input type="password" name="passwords1"
+                                style="width:45%;height:20px;" placeholder="请再次输入新密码" required>
+                                    <input type="hidden" name="username" value="<?php echo $_COOKIE["username"]?>"><br><br>
+                                    <input type="submit" class="post_buttons" value="确定">
+                        </form>
                     </div>
                 </div>
 

@@ -2,6 +2,10 @@
 
 include './islogin.php';
 
+if ($logined == 0) {
+    echo header('Location: ./access_denied.php');
+}
+
 // 注释 By Xiaomage
 if (isset($_GET['page'])){
     $page = $_GET['page'];
@@ -10,17 +14,12 @@ else $page=1; //确定当前页数
 $per_page = 4; //每页显示的文章数量
 $start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
 
-$search=$_GET['search'];
-
 date_default_timezone_set("PRC");
+
 $connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
 mysqli_set_charset($connect,"utf8");
-
-$flag=0;
-if ($search == NULL) $flag = 2;
-else {
-$sql = "SELECT * FROM $sql_dbname WHERE (title LIKE '%$search%' OR content LIKE '%$search%' OR author LIKE '%$search%') ORDER BY id DESC LIMIT $start_form,$per_page";
-$get_total  = "SELECT COUNT(*) FROM $sql_dbname WHERE (title LIKE '%$search%' OR content LIKE '%$search%' OR author LIKE '%$search%')";
+$sql = "SELECT * FROM $sql_dbname ORDER BY id DESC LIMIT $start_form,$per_page";
+$get_total  = "SELECT COUNT(*) FROM $sql_dbname";
 $data = $connect->query( $sql );
 $total = $connect->query( $get_total );
 $data_arrays = [];
@@ -29,7 +28,6 @@ while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
     $data_arrays[] = $data_array;
 }
 $totals = $total->fetch_array();
-}
 ?>
 <!DOCTYPE html>
 <html lang="zh_cn">
@@ -42,9 +40,7 @@ $totals = $total->fetch_array();
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.style.css">
     <link rel="stylesheet" href="./css/search.style.css">
-    <title><?php echo ("$search");
-    if ($flag!=2) echo '&nbsp;的';
-    ?>搜索结果 - Xiaomage's Blog</title>
+    <title>Xiaomage's Blog</title>
 </head>
 
 <body>
@@ -74,18 +70,24 @@ $totals = $total->fetch_array();
             <div id="main">
                 <div id="left">
                     <div id="blog_container">
-                        <div id="search_result">
-                            <?php if ($flag==2)
-                        echo 'QAQ...搜索失败';
-                        else 
-                        echo "$search &nbsp;的搜索结果";?>
-                        </div>
+                    <div id="search_result">
+                            管理Blog账号
+                    </div>
+                    <div>
+                        当前登录账号：<?php echo $_COOKIE["username"] ?>
+                    </div>
+                    <div>
+                        <input type="button" value="&nbsp;&nbsp;退出登录&nbsp;&nbsp;" onClick="location.href='logout.php'" class="blog_option" style="font-size:16px"/>
+                        <input type="button" value="&nbsp;&nbsp;修改密码&nbsp;&nbsp;" onClick="location.href='changepw.php'" class="blog_option" style="font-size:16px"/>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="search_result">
+                            管理已发表的文章
+                    </div>
                         <?php
-                    if ($flag!=2)
-                    {
                     foreach( $data_arrays as $data_array )
                     {
-                        $flag++;
                 ?>
                         <div id="blogs">
                             <div id="blog_title"><a id="title_a"
@@ -98,34 +100,35 @@ $totals = $total->fetch_array();
                         echo ('此文章于'.date( "Y-m-d H:i:s", $data_array['edit_time'] ).'被编辑');
                         ?>
                             </div>
-                            <div id="blog_content"><?php echo $data_array['content']?></div>
+                            <div id="blog_content"></div>
+                            <div id="blog_options">
+                                <div class="blog_option"><a
+                                        href="./edit.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;编辑此文章&nbsp;&nbsp;</a>
+                                </div>
+                                <div class="blog_option"><a
+                                        href="./delete.php?id=<?php echo $data_array['id'] ?>">&nbsp;&nbsp;删除此文章&nbsp;&nbsp;</a>
+                                </div>
+                            </div>
                             <hr>
                         </div>
                         <?php
                     }
-                }else
-                {
-                    echo '提示：搜索关键词不能为空哦！';
-                }
-                    if ($flag==0) echo 'QAQ...没有找到搜索结果，换一个关键词试试吧~';
                 ?>
-                        <?php if ($flag != 0 && $flag!=2) { ?>
                         <div id="page_turn">
                             <div class="page_turns"><a class="page_turn_a"
-                                    href="./searched.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1); echo "&search=$search";?>">
+                                    href="./admin.php?page=<?php if ($page == 1) echo '1';else echo ($page - 1);?>">
                                     <?php 
                             if ($page == 1) echo '&nbsp;&nbsp;没有上一页了&nbsp;&nbsp;';
                             else echo '&nbsp;&nbsp;⬅上一页&nbsp;&nbsp;';
                         ?>
                                 </a></div>
-                            <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./searched.php?page=<?php if (($totals[0] - ($page * $per_page)) > 0) echo ($page + 1);
-                            else echo ($page); echo "&search=$search";?>">
+                            <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./admin.php?page=<?php if (($totals[0] - ($page * $per_page)) > 0) echo ($page + 1);
+                            else echo ($page);?>">
                                     <?php
                             if (($totals[0] - $page * $per_page) > 0) echo '&nbsp;&nbsp;下一页➡&nbsp;&nbsp;';
                             else echo '&nbsp;&nbsp;没有下一页了&nbsp;&nbsp;';
                         ?></a></div>
                         </div>
-                        <?php } ?>
                     </div>
                 </div>
 
@@ -153,5 +156,8 @@ $totals = $total->fetch_array();
         </div>
     </div>
 </body>
+<?php
+mysqli_close($connect);
+?>
 
 </html>
