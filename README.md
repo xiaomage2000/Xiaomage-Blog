@@ -3,11 +3,13 @@
 
 萌新看完相关教程视频后制作的第一个小项目，请dalao轻喷...
 
+数据库的名称是xiaomage_blog，内有三张表，名称分别是blog_comment，存储评论；blog_user，存储用户名密码；xiaomage_blog，存储文章内容。
+
 详情请见：
  [https://xmgspace.me/archives/27/](https://xmgspace.me/archives/27/)
 
  Demo:
- [https://xmgspace.me/youthol_learning/6th/index.php](https://xmgspace.me/youthol_learning/6th/index.php)
+ [https://lab.xmgspace.me/web_learning/6th/index.php](https://lab.xmgspace.me/web_learning/6th/index.php)
 
 # 更新日志：
 #### 2019.1.21 v 1.0 发布
@@ -34,3 +36,12 @@
 
 3.部分页面CSS优化，加入页面背景。背景图片来自动漫《我们仍未知道那天所看见的花的名字。》吹爆这部动漫！
 
+
+
+#### 2019.2.28 v 1.3 发布
+
+1.加入了管理页面，可以在这个页面中退出登录，更改密码，删除文章，编辑文章等，更像专业博客的控制面板。
+
+2.改进了登录状态确认的代码，修复漏洞。
+
+3.一些小的改进，如css引入媒体查询等，另外移除大量卖萌元素QWQ...
