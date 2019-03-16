@@ -1,9 +1,9 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
 if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
+    echo header('Location: ./accessDenied.php');
 }
 
 $connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");

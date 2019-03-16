@@ -1,33 +1,23 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
 // 注释 By Xiaomage
 if (isset($_GET['article_id'])){
     $article_id = $_GET['article_id'];
 }
 else $article_id=1; //确定当前文章ID
-date_default_timezone_set("PRC");
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-mysqli_set_charset($connect,"utf8");
-$sql = "SELECT * FROM $sql_dbname WHERE id='$article_id'";
-$data = $connect->query( $sql );
-$data_arrays = [];
-while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
-{
-    $data_arrays[] = $data_array;
-}
 
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
+$sql = "SELECT * FROM $sql_dbname WHERE id='$article_id'";
+$data_arrays = $getData->getMainContent($sql,$connect);
+
+session_start();
 //留言板功能
-$connect1 = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-mysqli_set_charset($connect1,"utf8");
-$sql1 = "SELECT * FROM blog_comment WHERE article_id='$article_id'";
-$data1 = $connect1->query( $sql1 );
-$data_arrays1 = [];
-while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
-{
-    $data_arrays1[] = $data_array1;
-}
+$connect_Comment = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
+$sql_Comment = "SELECT * FROM blog_comment WHERE article_id='$article_id'";
+$data_arrays1 = $getData->getMainContent($sql_Comment,$connect_Comment);
+
 
 ?>
 <!DOCTYPE html>
@@ -122,8 +112,13 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
                     <div id="comment_box">
                         <div style="color: #3354AA;font-weight: bold;">请写下您的评论：</div><br>
                         <form action="./commented.php" method="post">
-                            昵称：<input type="text" name="visitor_name" style="width:50%;height:18px;"
-                                placeholder="请输入您的昵称"  required><br><br>
+                            <?php if(isset($_SESSION['visitor_name'])){
+                                echo '欢迎您，' . $_SESSION['visitor_name'].'<br><br>';
+                            }
+                            else{
+                            echo "昵称：<input type='text' name='visitor_name' style='width:50%;height:18px;'
+                                placeholder='请输入您的昵称'  required><br><br>";
+                            }?>
                             您的留言：<br><br><textarea name="comment" placeholder="请输入您的评论"
                                 style="width:80%;height:100px;"  required></textarea>
                             <input type="hidden" name="article_id" value="<?php echo $article_id?>"><br>
@@ -157,7 +152,6 @@ while ( $data_array1 = $data1->fetch_array( MYSQLI_ASSOC ) )
     </div>
 </body>
 <?php
-mysqli_close($connect);
 ?>
 
 <title><?php echo $data_array['title'] ?> - Xiaomage's Blog</title>

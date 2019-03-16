@@ -3,7 +3,7 @@
 setcookie("username", "", time()-3600);
 setcookie("passwords", "", time()-3600);
 
-include './islogin.php';
+include './isLogin.php';
 $logined = 0;
 ?>
 <!DOCTYPE html>

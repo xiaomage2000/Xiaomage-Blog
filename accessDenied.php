@@ -2,30 +2,7 @@
 
 include './isLogin.php';
 
-$accessDenied->isAccessDenied($logined);
-
-$flag=1;
-$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
-
-if (mysqli_connect_error()){
-    $flag=0;
-}else{
-    $flag=1;
-}
-
-$edit_id=$_POST["edit_id"];
-$title=$_POST["title"];
-$author=$_POST["author"];
-$edit_time=time();
-$content=$_POST["content"];
-
-if ($flag == 1)
-{
-    $sql = "UPDATE $sql_dbname SET title='$title', author='$author', content='$content', edit_time='$edit_time' WHERE id = '$edit_id'";
-    $getData->changeContent($sql,$connect);
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="zh_cn">
 
@@ -36,11 +13,8 @@ if ($flag == 1)
     <link rel="icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/index.style.css">
-    <link rel="stylesheet" href="./css/new_post.style.css">
-    <title>发布<?php
-                if ($flag==1) echo '成功';
-                else echo '失败';
-                ?> - Xiaomage's Blog</title>
+    <link rel="stylesheet" href="./css/search.style.css">
+    <title>禁止的操作！ Access Denied! - Xiaomage's Blog</title>
 </head>
 
 <body>
@@ -69,11 +43,9 @@ if ($flag == 1)
             </div>
             <div id="main">
                 <div id="left">
-                    <div id="new_post_title">发布<?php
-                if ($flag==1) echo '成功！';
-                else echo '失败...QAQ';
-                ?></div>
-                    <div id="back">
+                    <div id="search_flame">
+                        <div id=search_title>禁止的操作！ Access Denied!</div>
+                        <div style="margin-bottom:20px;margin-top:-10px;">你登录之后才能进行这项操作！请捷足先登！</div>
                         <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
                     </div>
                 </div>

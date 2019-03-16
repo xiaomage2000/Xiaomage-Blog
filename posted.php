@@ -1,16 +1,11 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
-if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
-}
+$accessDenied->isAccessDenied($logined);
 
 $flag=1;
-$flag1=1;
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-
-mysqli_set_charset($connect,"utf8");
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
 
 if (mysqli_connect_error()){
     $flag=0;
@@ -23,18 +18,11 @@ $author=$_POST["author"];
 $post_time=time();
 $content=$_POST["content"];
 
-if ($title == NULL || $author == NULL ||$content == NULL)
+if ($flag == 1)
 {
-    $flag = 0;
-    $flag1 = 0;
+    $sql = "INSERT INTO $sql_dbname ( title, author, post_time, content) VALUES ('$title','$author','$post_time','$content')";
+    $getData->changeContent($sql,$connect);
 }
-
-if ($flag1 == 1)
-{
-$sql = "INSERT INTO $sql_dbname ( title, author, post_time, content) VALUES ('$title','$author','$post_time','$content')";
-$connect->query( $sql );
-}
-mysqli_close($connect);
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +37,7 @@ mysqli_close($connect);
     <link rel="stylesheet" href="./css/index.style.css">
     <link rel="stylesheet" href="./css/new_post.style.css">
     <title>发布<?php
-                if ($flag==1 && $flag1 == 1) echo '成功';
+                if ($flag==1) echo '成功';
                 else echo '失败';
                 ?> - Xiaomage's Blog</title>
 </head>
@@ -85,9 +73,6 @@ mysqli_close($connect);
                 else echo '失败...QAQ';
                 ?></div>
                     <div id="back">
-                        <?php if ($flag1 == 0){?>
-                        <div>发布前请先确保标题、作者或文章内容不为空哦~<br><br></div>
-                        <?php }?>
                         <a href="./index.php">点击<span style="color: #3354AA">这里</span>回到首页~~ </a>
                     </div>
                 </div>

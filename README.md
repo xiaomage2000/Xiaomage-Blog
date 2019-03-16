@@ -10,7 +10,7 @@
 
  Demo:
  [https://lab.xmgspace.me/web_learning/6th/index.php](https://lab.xmgspace.me/web_learning/6th/index.php)
- 
+
  Xiaomage's Lab:
   [https://lab.xmgspace.me/](https://lab.xmgspace.me/)
 
@@ -48,3 +48,13 @@
 2.改进了登录状态确认的代码，修复漏洞。
 
 3.一些小的改进，如css引入媒体查询等，另外移除大量卖萌元素QWQ...
+
+
+
+#### 2019.3.15 v 1.4 发布
+
+1.重构部分执行代码，将部分代码与纯HTML剥离开来，通过类与对象，增强可维护性。
+
+2.删除修改了一些无用的代码，减少代码冗余。
+
+3.加入了评论的用户记忆功能，通过session实现，用户第一次留言需要输入昵称，在不清除cookies的情况下，以后则不需要再次输入。

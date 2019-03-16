@@ -3,15 +3,11 @@
 $flag=1;
 $flag1=1;
 
-include './islogin.php';
+include './isLogin.php';
 
-if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
-}
+$accessDenied->isAccessDenied($logined);
 
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-
-mysqli_set_charset($connect,"utf8");
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
 
 if (mysqli_connect_error()){
     $flag=0;
@@ -29,10 +25,11 @@ if (strcmp("$passwords",$passwords1) == 0)
         }
 else $flag1 = 0;
 
-$sql = "UPDATE blog_user SET passwords='$passwords' WHERE username = '$username'";
-$connect->query( $sql );
-
-mysqli_close($connect);
+if ($flag == 1 &&$flag1 == 1)
+{
+    $sql = "UPDATE blog_user SET passwords='$passwords' WHERE username = '$username'";
+    $getData->changeContent($sql,$connect);
+}
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,7 @@
 <?php
 
-include './islogin.php';
+require_once './isLogin.php';
+require_once './dataBase.php';
 
 // 注释 By Xiaomage
 if (isset($_GET['page'])){
@@ -10,20 +11,12 @@ else $page=1; //确定当前页数
 $per_page = 4; //每页显示的文章数量
 $start_form = ($page-1) * $per_page; //查询起始点，每页显示4条
 
-date_default_timezone_set("PRC");
-
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-mysqli_set_charset($connect,"utf8");
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
 $sql = "SELECT * FROM $sql_dbname ORDER BY id DESC LIMIT $start_form,$per_page";
 $get_total  = "SELECT COUNT(*) FROM $sql_dbname";
-$data = $connect->query( $sql );
-$total = $connect->query( $get_total );
-$data_arrays = [];
-while ( $data_array = $data->fetch_array( MYSQLI_ASSOC ) )
-{
-    $data_arrays[] = $data_array;
-}
-$totals = $total->fetch_array();
+$total = $getData->getTotal($get_total,$connect);
+$data_arrays = $getData->getMainContent($sql,$connect);
+
 ?>
 <!DOCTYPE html>
 <html lang="zh_cn">
@@ -94,10 +87,10 @@ $totals = $total->fetch_array();
                             else echo '&nbsp;&nbsp;⬅较新的文章&nbsp;&nbsp;';
                         ?>
                                 </a></div>
-                            <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./index.php?page=<?php if (($totals[0] - ($page * $per_page)) > 0) echo ($page + 1);
+                            <div class="page_turns" style="margin-right:40px;"><a class="page_turn_a" href="./index.php?page=<?php if (($total - ($page * $per_page)) > 0) echo ($page + 1);
                             else echo ($page);?>">
                                     <?php
-                            if (($totals[0] - $page * $per_page) > 0) echo '&nbsp;&nbsp;较旧的文章➡&nbsp;&nbsp;';
+                            if (($total - $page * $per_page) > 0) echo '&nbsp;&nbsp;较旧的文章➡&nbsp;&nbsp;';
                             else echo '&nbsp;&nbsp;没有更旧的文章了&nbsp;&nbsp;';
                         ?></a></div>
                         </div>
@@ -128,8 +121,5 @@ $totals = $total->fetch_array();
         </div>
     </div>
 </body>
-<?php
-mysqli_close($connect);
-?>
 
 </html>

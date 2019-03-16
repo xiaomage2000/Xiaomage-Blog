@@ -1,10 +1,8 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
-if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
-}
+$accessDenied->isAccessDenied($logined);
 
 // 注释 By Xiaomage
 if (isset($_GET['page'])){

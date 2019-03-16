@@ -3,7 +3,7 @@
 $flag=1;
 $flag1=1;
 
-include './islogin.php';
+include './isLogin.php';
 $connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
 
 mysqli_set_charset($connect,"utf8");
@@ -37,7 +37,7 @@ if ($flag1 == 1)
         }
     else $flag1 = 2;
 }
-include './islogin.php';
+
 mysqli_close($connect);
 ?>
 

@@ -1,6 +1,6 @@
 <?php 
 
-include './islogin.php';
+include './isLogin.php';
 
 ?>
 

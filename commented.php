@@ -1,12 +1,9 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
 $flag=1;
-$flag1=1;
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-
-mysqli_set_charset($connect,"utf8");
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
 
 if (mysqli_connect_error()){
     $flag=0;
@@ -19,18 +16,14 @@ $comment=$_POST["comment"];
 $article_id=$_POST["article_id"];
 $comment_time=time();
 
-if ($visitor_name == NULL || $comment == NULL)
-{
-    $flag = 0;
-    $flag1 = 0;
-}
+session_start();
+$_SESSION['visitor_name'] = $visitor_name;
 
-if ($flag1 == 1)
+if ($flag == 1)
 {
-$sql = "INSERT INTO blog_comment ( visitor_name, comment , article_id , comment_time ) VALUES ('$visitor_name','$comment','$article_id','$comment_time')";
-$connect->query( $sql );
+    $sql = "INSERT INTO blog_comment ( visitor_name, comment , article_id , comment_time ) VALUES ('$visitor_name','$comment','$article_id','$comment_time')";
+    $getData->changeContent($sql,$connect);
 }
-mysqli_close($connect);
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +38,7 @@ mysqli_close($connect);
     <link rel="stylesheet" href="./css/index.style.css">
     <link rel="stylesheet" href="./css/new_post.style.css">
     <title>评论发表<?php
-                if ($flag==1 && $flag1 == 1) echo '成功';
+                if ($flag==1) echo '成功';
                 else echo '失败';
                 ?> - Xiaomage's Blog</title>
 </head>
@@ -81,9 +74,6 @@ mysqli_close($connect);
                 else echo '失败...QAQ';
                 ?></div>
                     <div id="back">
-                        <?php if ($flag1 == 0){?>
-                        <div>发表前请先确保昵称或评论内容不为空哦~<br><br></div>
-                        <?php }?>
                         <a href="./read.php?article_id=<?php echo $article_id ?>">点击<span
                                 style="color: #3354AA">这里</span>返回原文章~~ </a>
                     </div>

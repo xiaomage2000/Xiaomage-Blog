@@ -1,11 +1,11 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
 $author = $_COOKIE["username"];
-if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
-}
+
+$accessDenied->isAccessDenied($logined);
+
 ?>
 <!DOCTYPE html>
 <html lang="zh_cn">

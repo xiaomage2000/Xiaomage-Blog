@@ -1,27 +1,25 @@
 <?php
 
-include './islogin.php';
+include './isLogin.php';
 
-if ($logined == 0) {
-    echo header('Location: ./access_denied.php');
-}
+$accessDenied->isAccessDenied($logined);
 
 $flag=1;
-$connect = new mysqli("$sql_server","$sql_user","$sql_pass","$sql_dbname");
-
-mysqli_set_charset($connect,"utf8");
+$connect = $getData->connect($sql_server,$sql_user,$sql_pass,$sql_dbname);
 
 if (mysqli_connect_error()){
     $flag=0;
 }else{
     $flag=1;
 }
+
 $del_id=$_GET["id"];
 
-$sql = "DELETE FROM $sql_dbname WHERE id = $del_id";
-$connect->query( $sql ); 
-
-mysqli_close($connect);
+if ($flag == 1)
+{
+    $sql = "DELETE FROM $sql_dbname WHERE id = $del_id";
+    $getData->changeContent($sql,$connect);
+}
 ?>
 
 <!DOCTYPE html>
