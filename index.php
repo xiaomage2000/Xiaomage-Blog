@@ -116,7 +116,7 @@ $data_arrays = $getData->getMainContent($sql,$connect);
             <div id="bottom">
                 <div>©2019 Xiaomage's Blog. All Rights Reserved.</div>
                 <div><a href="https://github.com/xiaomage2000/Xiaomage-Blog" style="color: #999;">Made with ♥
-                        &nbsp;&nbsp;Version : v 1.3</a></div>
+                        &nbsp;&nbsp;Version : v 1.4</a></div>
             </div>
         </div>
     </div>
